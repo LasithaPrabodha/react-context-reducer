@@ -38,7 +38,6 @@ export default (state, action) => {
         }
         return user;
       });
-      console.log(updateUsers);
       return {
         ...state,
         users: updateUsers,
