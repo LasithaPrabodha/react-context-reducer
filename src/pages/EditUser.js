@@ -2,21 +2,21 @@ import React, { useState, useContext, useEffect } from "react";
 import { GlobalContext } from "../context/GlobalState";
 import { Link, useHistory } from "react-router-dom";
 import { Form, FormGroup, Label, Input, Button } from "reactstrap";
+import { updateUser } from "../services/User";
 
 export const EditUser = (props) => {
   const { editUser, users, dispatch } = useContext(GlobalContext);
   const [selectedUser, setSelectedUser] = useState({
     id: "",
-    fname: "",
-    lname: "",
+    firstName: "",
+    lastName: "",
     email: "",
-    password: "",
   });
   const history = useHistory();
   const currentUserId = props.match.params.id;
 
   useEffect(() => {
-    const user = users.find((user) => user.id === currentUserId);
+    const user = users.find((user) => user.id === +currentUserId);
     setSelectedUser(user);
   }, [currentUserId, users]);
 
@@ -26,9 +26,12 @@ export const EditUser = (props) => {
     setSelectedUser((prevState) => ({ ...prevState, [name]: value }));
   };
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
-    dispatch(editUser(selectedUser));
+
+    const user = await updateUser(selectedUser);
+
+    dispatch(editUser(user));
     history.push("/");
   };
 
@@ -38,8 +41,8 @@ export const EditUser = (props) => {
         <Label>First Name</Label>
         <Input
           type="text"
-          value={selectedUser.fname}
-          name="fname"
+          value={selectedUser.firstName}
+          name="firstName"
           onChange={onChange}
           placeholder="Enter first name"
           required
@@ -49,8 +52,8 @@ export const EditUser = (props) => {
         <Label>Last Name</Label>
         <Input
           type="text"
-          value={selectedUser.lname}
-          name="lname"
+          value={selectedUser.lastName}
+          name="lastName"
           onChange={onChange}
           placeholder="Enter last name"
           required
@@ -67,18 +70,7 @@ export const EditUser = (props) => {
           required
         ></Input>
       </FormGroup>
-      <FormGroup>
-        <Label>Password</Label>
-        <Input
-          type="password"
-          name="password"
-          value={selectedUser.password}
-          onChange={onChange}
-          placeholder="Enter password"
-          required
-        ></Input>
-      </FormGroup>
-      <Button type="submit">Edit Name</Button>
+      <Button type="submit">Edit</Button>
       <Link to="/" className="btn btn-danger ml-2">
         Cancel
       </Link>

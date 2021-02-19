@@ -1,8 +1,8 @@
-import { ADD_USER, EDIT_USER, GET_USERS, REMOVE_USER } from "./ActionTypes";
+import { SIGNUP_USER, EDIT_USER, SET_USERS, REMOVE_USER, SIGNIN_USER, LOGOUT_USER } from "./ActionTypes";
 
 export default (state, action) => {
   switch (action.type) {
-    case GET_USERS:
+    case SET_USERS:
       return {
         ...state,
         users: action.payload,
@@ -14,10 +14,20 @@ export default (state, action) => {
           return user.id !== action.payload;
         }),
       };
-    case ADD_USER:
+    case SIGNUP_USER:
       return {
         ...state,
         users: [action.payload, ...state.users],
+      };
+    case SIGNIN_USER:
+      return {
+        ...state,
+        loggedInUser: action.payload,
+      };
+    case LOGOUT_USER:
+      return {
+        ...state,
+        loggedInUser: null,
       };
     case EDIT_USER:
       const updateUser = action.payload;
@@ -28,6 +38,7 @@ export default (state, action) => {
         }
         return user;
       });
+      console.log(updateUsers);
       return {
         ...state,
         users: updateUsers,

@@ -1,40 +1,43 @@
-import { ADD_USER, EDIT_USER, GET_USERS, REMOVE_USER } from "./ActionTypes";
+import { SIGNUP_USER, EDIT_USER, SET_USERS, LOGOUT_USER, REMOVE_USER, SIGNIN_USER } from "./ActionTypes";
 
-export const getUsers = () => {
-  // fetch() get
-
-  const users = [];
+export const setUsers = (users) => {
   return {
-    type: GET_USERS,
+    type: SET_USERS,
     payload: users,
   };
 };
 
 export const removeUser = (id) => {
-  // fetch() delete
-
   return {
     type: REMOVE_USER,
     payload: id,
   };
 };
 
-export const addUser = (user) => {
-  // fetch() post
-
+export const signUp = (user) => {
   return {
-    type: ADD_USER,
+    type: SIGNUP_USER,
     payload: user,
   };
 };
 
 export const editUser = (user) => {
-  // fetch() post
-
   return {
     type: EDIT_USER,
     payload: user,
   };
 };
 
-export default { getUsers, removeUser, addUser, editUser };
+export const signIn = (user) => {
+  return {
+    type: SIGNIN_USER,
+    payload: user,
+  };
+};
+export const logOut = () => {
+  return {
+    type: LOGOUT_USER,
+  };
+};
+
+export default { setUsers, removeUser, signUp, editUser, signIn, logOut };

@@ -2,30 +2,37 @@ import React, { useState, useContext } from "react";
 import { GlobalContext } from "../context/GlobalState";
 import { Link, useHistory } from "react-router-dom";
 import { Form, FormGroup, Label, Input, Button } from "reactstrap";
-import { v4 as uuid } from "uuid";
+import { signUpUser } from "../services/Auth";
 
-export const AddUser = () => {
-  const { addUser, dispatch } = useContext(GlobalContext);
+export const AddUser = (props) => {
+  const { signUp, dispatch } = useContext(GlobalContext);
 
-  const [{ fname, lname, email, password }, setState] = useState({
-    fname: "",
-    lname: "",
+  const [{ firstName, lastName, email, password }, setState] = useState({
+    firstName: "",
+    lastName: "",
     email: "",
     password: "",
   });
   const history = useHistory();
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
+
     const newUser = {
-      id: uuid(),
-      fname,
-      lname,
+      firstName,
+      lastName,
       email,
       password,
     };
-    dispatch(addUser(newUser));
-    history.push("/");
+
+    try {
+      const user = await signUpUser(newUser);
+
+      dispatch(signUp(user));
+      history.goBack();
+    } catch (error) {
+      alert(error);
+    }
   };
 
   const onChange = (e) => {
@@ -42,8 +49,8 @@ export const AddUser = () => {
         <Label>First Name</Label>
         <Input
           type="text"
-          value={fname}
-          name="fname"
+          value={firstName}
+          name="firstName"
           onChange={onChange}
           placeholder="Enter first name"
           required
@@ -53,8 +60,8 @@ export const AddUser = () => {
         <Label>Last Name</Label>
         <Input
           type="text"
-          value={lname}
-          name="lname"
+          value={lastName}
+          name="lastName"
           onChange={onChange}
           placeholder="Enter last name"
           required

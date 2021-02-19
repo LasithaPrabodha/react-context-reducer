@@ -5,6 +5,7 @@ import actions from "./Actions";
 // Initial State
 const initialState = {
   users: [],
+  loggedInUser: null,
 };
 
 // Create Context
@@ -12,7 +13,9 @@ export const GlobalContext = createContext(initialState);
 
 // Provider Component
 export const GlobalProvider = ({ children }) => {
-  const [{ users }, dispatch] = useReducer(AppReducer, initialState);
+  const [{ users, loggedInUser }, dispatch] = useReducer(AppReducer, initialState);
 
-  return <GlobalContext.Provider value={{ users, dispatch, ...actions }}>{children}</GlobalContext.Provider>;
+  return (
+    <GlobalContext.Provider value={{ users, loggedInUser, dispatch, ...actions }}>{children}</GlobalContext.Provider>
+  );
 };
